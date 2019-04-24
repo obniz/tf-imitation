@@ -263,7 +263,7 @@ export function getFaceYaw(keypoints) {
   eyeToNoseVector.x = nose.x - leftEye.x;
   eyeToNoseVector.y = eyeVector.y;
   var ratio = norm(eyeToNoseVector) / norm(eyeVector);
-  return ratio * 180;
+  return 180 - ratio * 180;
 }
 
 export function getFacePitch(keypoints, earFlag) {
