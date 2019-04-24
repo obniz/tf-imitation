@@ -303,7 +303,6 @@ function detectPoseInRealTime(video, net) {
     }
     if (maxPose) {
       if (!guiState.output.showAll) {
-        // console.log(maxPose);
         if (guiState.output.showPoints)
           drawKeypoints(maxPose.keypoints, minPartConfidence, ctx);
         if (guiState.output.showSkeleton)
@@ -313,12 +312,10 @@ function detectPoseInRealTime(video, net) {
       }
       
       // 一番大きい人物の腕取得
-      // console.log(existsArms(maxPose.keypoints, minPartConfidence));
       const offset = 30;
       if (existsArms(maxPose.keypoints, minPartConfidence).left) {
         let angles = getArmsAngle(maxPose.keypoints);
         let wristAngles = getWristAngle(maxPose.keypoints);
-        // console.log("left: " + angles.left); // なぜかright
         if (angles.left < wristAngles.left)
           left_angles.push(wristAngles.left + offset);
         else
@@ -327,7 +324,6 @@ function detectPoseInRealTime(video, net) {
       if (existsArms(maxPose.keypoints, minPartConfidence).right) {
         let angles = getArmsAngle(maxPose.keypoints);
         let wristAngles = getWristAngle(maxPose.keypoints);
-        // console.log("right: " + angles.right); // なぜかleft
         if (angles.right < wristAngles.right)
           right_angles.push(180 - wristAngles.right - offset);
         else
@@ -373,9 +369,9 @@ export async function bindPage() {
     faceYawServo.status = 90;
     faceYawServo.angle(faceYawServo.status);
 
-    startServo(rightServo, right_angles, 500);
-    startServo(leftServo, left_angles, 500);
-    startServo(faceYawServo, faceYaws, 500);
+    startServo(rightServo, right_angles, 200);
+    startServo(leftServo, left_angles, 200);
+    startServo(faceYawServo, faceYaws, 200);
     
   }
   document.getElementById('loading').style.display = 'none';
@@ -424,9 +420,9 @@ function startServo(servo, angles, interval) {
     if (angles.length > 0) {
       let med = median(angles);
       if (Math.abs(servo.status - med) > 5) {
-        moveServoTo(servo, med);
+        // moveServoTo(servo, med);
+        servo.angle(med)
       }
-      // moveServoTo(servo, med);
       angles.splice(0);
     }
   }, interval);
@@ -436,7 +432,6 @@ function median(list) {
   let half = (list.length / 2) | 0;
   let sorted = list.slice();
   sorted.sort();
-  console.log("sorted: " + sorted);
   if (sorted.length % 2) {
     return sorted[half];
   }
