@@ -8,7 +8,7 @@ node_modules/
 karma.conf.js
 *.tgz
 dist/*
-.cache
+.cache/
 .travis.yml
 .npmignore
 tslint.json
